@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
    <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-       package="com.yourdomain.appname">
+       package="com.jeasonwebapp.i6">
 
        <application
            android:allowBackup="true"
            android:icon="@mipmap/ic_launcher"
-           android:label="您的应用名称"
+           android:label="i6"
            android:theme="@style/AppTheme">
            
            <activity android:name=".MainActivity"
