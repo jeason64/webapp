@@ -1,13 +1,33 @@
 name: Generate Gradle Wrapper
-   on: [workflow_dispatch]
-   jobs:
-     generate:
-       runs-on: ubuntu-latest
-       steps:
-         - uses: actions/checkout@v4
-         - run: chmod +x generate_gradlew.sh
-         - run: ./generate_gradlew.sh
-         - uses: actions/upload-artifact@v4
-           with:
-             name: gradle-files
-             path: android/
+on: 
+  workflow_dispatch:  # 允许手动触发
+  push:
+    paths: 
+      - 'generate_gradlew.sh'  # 只有该文件变化时才运行
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 步骤1：生成gradlew
+      - name: Generate Gradle Wrapper
+        run: |
+          mkdir -p android
+          cd android
+          curl -LO https://raw.githubusercontent.com/gradle/gradle/master/gradlew
+          chmod +x gradlew
+          ./gradlew --version
+
+      # 步骤2：打包必要文件
+      - name: Archive Gradle Files
+        run: |
+          cd android
+          zip -r ../gradle-wrapper.zip gradlew gradle/
+
+      # 步骤3：上传产物
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gradle-wrapper
+          path: gradle-wrapper.zip
