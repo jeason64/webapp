@@ -1,0 +1,21 @@
+plugins {
+       id 'com.android.application'
+   }
+
+   android {
+       compileSdk 34
+       defaultConfig {
+           applicationId "com.yourdomain.appname"
+           minSdk 21
+           targetSdk 34
+       }
+       buildTypes {
+           release {
+               minifyEnabled false
+           }
+       }
+   }
+
+   dependencies {
+       implementation fileTree(dir: 'libs', include: ['*.jar'])
+   }
