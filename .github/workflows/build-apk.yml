@@ -1,0 +1,31 @@
+name: Build Offline APK
+   on: [push]
+   
+   jobs:
+     build:
+       runs-on: ubuntu-latest
+       steps:
+         - uses: actions/checkout@v4
+         
+         # 步骤1：将网页复制到安卓assets
+         - name: Prepare Web Assets
+           run: |
+             mkdir -p android/app/src/main/assets/
+             cp -R web/* android/app/src/main/assets/www/
+             
+         # 步骤2：构建APK
+         - name: Build APK
+           uses: mingchen/docker-android-build-box@v1.6.0
+           with:
+             args: >
+               /bin/bash -c "
+               cd android &&
+               ./gradlew assembleRelease -PuseLocalAssets=true
+               "
+         
+         # 步骤3：上传APK
+         - name: Upload APK
+           uses: actions/upload-artifact@v3
+           with:
+             name: offline-app
+             path: android/app/build/outputs/apk/release/app-release.apk
